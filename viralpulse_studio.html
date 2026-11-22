@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViralPulse India — Multi-Platform Viral Trend & AI Content Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        studio: {
+                            900: '#090d16',
+                            800: '#111827',
+                            700: '#1f293d',
+                            600: '#374151',
+                            accent: '#6366f1',
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            gold: '#f59e0b',
+                            saffron: '#f97316'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Hind', sans-serif;
+            background-color: #080c14;
+            color: #f3f4f6;
+        }
+        .hindi-text {
+            font-family: 'Hind', 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .pulse-glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+        }
+        .star-gold {
+            color: #fbbf24;
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen custom-scrollbar flex flex-col selection:bg-indigo-600 selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- MAIN APP HEADER -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-gray-800 bg-studio-900/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between py-3 gap-3">
+                
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-pink-500 to-amber-500 p-0.5 flex items-center justify-center shadow-lg">
+                            <div class="w-full h-full bg-gray-950 rounded-[10px] flex items-center justify-center">
+                                <i class="fa-solid font-bold fa-bolt text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-pink-500 text-lg"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="font-extrabold text-xl tracking-tight text-white flex items-center gap-2">
+                                    ViralPulse <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">INDIA 🇮🇳</span>
+                                </h1>
+                            </div>
+                            <p class="text-xs text-gray-400">Multi-Platform Trend Radar & Bilingual AI Script Studio</p>
+                        </div>
+                    </div>
+
+                    <!-- Sync Badge Mobile -->
+                    <div class="md:hidden flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2.5 py-1 rounded-full">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        Live Algorithmic Radar
+                    </div>
+                </div>
+
+                <!-- Live Status & Data Refresh Controls -->
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <div class="hidden md:flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-3 py-1.5 rounded-full">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span>Algorithm Sync: <strong id="last-sync-time" class="text-gray-200">Just Now</strong></span>
+                    </div>
+
+                    <button id="refresh-btn" onclick="refreshTrendData()" class="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-sm rounded-xl shadow-lg transition-all transform active:scale-95 group">
+                        <i id="refresh-icon" class="fa-solid fa-arrows-rotate text-indigo-200 group-hover:rotate-180 transition-transform duration-500"></i>
+                        <span>Load Latest Data</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Controls Strip -->
+            <div class="py-3 border-t border-gray-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+                
+                <!-- Platform Filters -->
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 sm:pb-0 w-full sm:w-auto">
+                    <span class="text-gray-400 font-medium mr-1 uppercase text-[10px] tracking-wider">Platform:</span>
+                    <button onclick="setPlatformFilter('all')" class="platform-chip active px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 bg-gray-800 text-white border border-gray-700 hover:bg-gray-700" data-platform="all">
+                        <i class="fa-solid fa-layer-group text-indigo-400"></i> All Platforms
+                    </button>
+                    <button onclick="setPlatformFilter('youtube')" class="platform-chip px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 bg-gray-900 text-gray-400 border border-gray-800 hover:bg-gray-800 hover:text-white" data-platform="youtube">
+                        <i class="fa-brands fa-youtube text-red-500"></i> YouTube Shorts/Long
+                    </button>
+                    <button onclick="setPlatformFilter('instagram')" class="platform-chip px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 bg-gray-900 text-gray-400 border border-gray-800 hover:bg-gray-800 hover:text-white" data-platform="instagram">
+                        <i class="fa-brands fa-instagram text-pink-500"></i> Instagram Reels
+                    </button>
+                    <button onclick="setPlatformFilter('facebook')" class="platform-chip px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5 bg-gray-900 text-gray-400 border border-gray-800 hover:bg-gray-800 hover:text-white" data-platform="facebook">
+                        <i class="fa-brands fa-facebook text-blue-500"></i> Facebook Videos
+                    </button>
+                </div>
+
+                <!-- Niche & Language Selectors -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex items-center bg-gray-950 p-1 rounded-lg border border-gray-800">
+                        <button onclick="setLanguageMode('bilingual')" id="lang-btn-bilingual" class="lang-chip px-2.5 py-1 rounded-md text-[11px] font-medium bg-indigo-600 text-white transition">EN + HI</button>
+                        <button onclick="setLanguageMode('hindi')" id="lang-btn-hindi" class="lang-chip px-2.5 py-1 rounded-md text-[11px] font-medium text-gray-400 hover:text-white transition">हिंदी Focus</button>
+                        <button onclick="setLanguageMode('english')" id="lang-btn-english" class="lang-chip px-2.5 py-1 rounded-md text-[11px] font-medium text-gray-400 hover:text-white transition">English Focus</button>
+                    </div>
+
+                    <!-- Category Dropdown -->
+                    <select id="niche-select" onchange="applyFilters()" class="bg-gray-900 text-gray-200 border border-gray-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                        <option value="all">🔥 All Niches & Categories</option>
+                        <option value="tech">🤖 AI & Tech Hacks</option>
+                        <option value="kids">👶 Kids Rhymes & Family</option>
+                        <option value="lifestyle">✈️ Travel, Vlog & Lifestyle</option>
+                        <option value="comedy">😂 Relatable Comedy & POV</option>
+                        <option value="gaming">🎮 Gaming & Entertainment</option>
+                        <option value="finance">💰 Money, Deals & Quick-Comm</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- METRICS & DASHBOARD STATS BAR -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="glass-panel p-4 rounded-2xl border border-gray-800 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium">Trends Monitored</p>
+                    <p id="stat-trends-count" class="text-xl font-bold text-white mt-0.5">14 Active</p>
+                    <p class="text-[10px] text-emerald-400 mt-1"><i class="fa-solid fa-arrow-trend-up"></i> Updated 2m ago</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                    <i class="fa-solid fa-chart-line text-lg"></i>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-gray-800 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium">Avg Viral Growth</p>
+                    <p id="stat-viral-rate" class="text-xl font-bold text-emerald-400 mt-0.5">+1,850%</p>
+                    <p class="text-[10px] text-gray-400 mt-1">High Velocity Wave</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <i class="fa-solid fa-fire text-lg"></i>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-gray-800 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium">Top Format Right Now</p>
+                    <p id="stat-top-format" class="text-xl font-bold text-amber-400 mt-0.5">Shorts & Reels</p>
+                    <p class="text-[10px] text-gray-400 mt-1">Under 45s Hook Format</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                    <i class="fa-solid fa-bolt text-lg"></i>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-gray-800 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium">Hindi Creator Index</p>
+                    <p class="text-xl font-bold text-pink-400 mt-0.5">94.8 / 100</p>
+                    <p class="text-[10px] text-pink-400 mt-1">Hinglish Audio Dominance</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400">
+                    <i class="fa-solid fa-language text-lg"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN TWO-COLUMN STUDIO WORKSPACE -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- LEFT COLUMN: TRENDING TOPICS RADAR FEED (7 COLS) -->
+            <div class="lg:col-span-7 flex flex-col gap-4">
+                
+                <!-- Feed Header -->
+                <div class="flex items-center justify-between pb-2 border-b border-gray-800">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-indigo-400 text-lg"></i>
+                        <h2 class="text-lg font-bold text-white tracking-wide">Live Viral Trends Grid</h2>
+                        <span id="active-filter-badge" class="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-300 font-mono">All (12)</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 text-xs text-gray-400">
+                        <span>Sort by:</span>
+                        <select id="sort-select" onchange="applyFilters()" class="bg-gray-900 border border-gray-800 text-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-indigo-500">
+                            <option value="stars">⭐ Viral Priority Stars (High-Low)</option>
+                            <option value="velocity">🚀 Growth Velocity (%)</option>
+                            <option value="views">👀 Views Benchmark</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- TREND CARDS CONTAINER -->
+                <div id="trends-grid" class="flex flex-col gap-4">
+                    <!-- Dynamic Trend Cards inserted by JavaScript -->
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: CONTENT CREATOR & SCRIPT STUDIO (5 COLS) -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                
+                <div class="sticky top-28 flex flex-col gap-6">
+                    
+                    <!-- STUDIO CONTROL TABS -->
+                    <div class="glass-panel p-5 rounded-2xl border border-gray-800 shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                        <!-- Studio Header -->
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-800 mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-base text-white">AI Content & Script Lab</h3>
+                                    <p class="text-xs text-gray-400">Selected: <span id="selected-topic-title" class="text-indigo-300 font-semibold">Select a Trend Card</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB NAVIGATION -->
+                        <div class="flex rounded-xl bg-gray-950 p-1 border border-gray-800 mb-4 text-xs font-medium">
+                            <button onclick="switchStudioTab('tags')" id="tab-btn-tags" class="studio-tab-btn active flex-1 py-2 rounded-lg text-center transition bg-indigo-600 text-white shadow">
+                                <i class="fa-solid fa-hashtag mr-1"></i> Tags & Metadata
+                            </button>
+                            <button onclick="switchStudioTab('script')" id="tab-btn-script" class="studio-tab-btn flex-1 py-2 rounded-lg text-center transition text-gray-400 hover:text-white">
+                                <i class="fa-solid fa-scroll mr-1"></i> Script Generator
+                            </button>
+                        </div>
+
+                        <!-- TAB 1: BILINGUAL TAGS & METADATA STUDIO -->
+                        <div id="studio-tab-tags" class="flex flex-col gap-4">
+                            
+                            <!-- Hook & Title Blueprint -->
+                            <div class="bg-gray-900/90 rounded-xl p-3.5 border border-gray-800 flex flex-col gap-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1">
+                                        <i class="fa-solid fa-heading"></i> High-CTR Title & Hook
+                                    </span>
+                                    <button onclick="copyToClipboard('hook-text-en', 'Title Hook copied!')" class="text-xs text-gray-400 hover:text-white flex items-center gap-1">
+                                        <i class="fa-regular fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <p id="hook-text-en" class="text-sm font-semibold text-gray-100 bg-gray-950 p-2.5 rounded-lg border border-gray-800/80">
+                                    Click any trend card on the left to auto-load viral titles & tags!
+                                </p>
+                                
+                                <!-- Hindi Version -->
+                                <div class="mt-1 pt-2 border-t border-gray-800/60">
+                                    <span class="text-[10px] font-medium text-indigo-400 uppercase tracking-wider flex items-center gap-1 mb-1">
+                                        <i class="fa-solid fa-language"></i> Hindi / Hinglish Version
+                                    </span>
+                                    <p id="hook-text-hi" class="text-xs text-gray-300 hindi-text bg-gray-950 p-2 rounded border border-gray-800/50 italic">
+                                        ट्रेंडिंग कार्ड पर क्लिक करके हिंदी टाइटल देखें।
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- English High Search Volume Tags -->
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-semibold text-gray-300 flex items-center gap-1">
+                                        <i class="fa-solid fa-[#] text-indigo-400"></i> Popular English Tags
+                                    </span>
+                                    <button onclick="copyTagGroup('tags-en-container')" class="text-[11px] text-indigo-400 hover:underline flex items-center gap-1">
+                                        <i class="fa-regular fa-copy"></i> Copy EN Tags
+                                    </button>
+                                </div>
+                                <div id="tags-en-container" class="flex flex-wrap gap-1.5 bg-gray-950 p-3 rounded-xl border border-gray-800 min-h-[60px] items-center">
+                                    <span class="text-xs text-gray-500 italic">Select a topic to populate tags...</span>
+                                </div>
+                            </div>
+
+                            <!-- Hindi & Hinglish Searched Tags -->
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-semibold text-gray-300 flex items-center gap-1">
+                                        <i class="fa-solid fa-[#] text-pink-400"></i> Trending Hindi & Hinglish Tags (वायरल टैग्स)
+                                    </span>
+                                    <button onclick="copyTagGroup('tags-hi-container')" class="text-[11px] text-pink-400 hover:underline flex items-center gap-1">
+                                        <i class="fa-regular fa-copy"></i> Copy Hindi Tags
+                                    </button>
+                                </div>
+                                <div id="tags-hi-container" class="flex flex-wrap gap-1.5 bg-gray-950 p-3 rounded-xl border border-gray-800 min-h-[60px] items-center hindi-text">
+                                    <span class="text-xs text-gray-500 italic">हिंदी टैग्स यहाँ दिखाई देंगे...</span>
+                                </div>
+                            </div>
+
+                            <!-- Copy All Tags Button -->
+                            <button onclick="copyAllStudioTags()" class="w-full py-2.5 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 rounded-xl font-medium text-xs flex items-center justify-center gap-2 transition">
+                                <i class="fa-solid fa-clone"></i> Copy All Tags (English + Hindi)
+                            </button>
+
+                        </div>
+
+                        <!-- TAB 2: SMART AI SCRIPT GENERATOR -->
+                        <div id="studio-tab-script" class="hidden flex flex-col gap-4">
+                            
+                            <!-- Generator Settings -->
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div>
+                                    <label class="block text-gray-400 mb-1 font-medium">Format & Platform</label>
+                                    <select id="script-platform" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-indigo-500">
+                                        <option value="shorts">YouTube Shorts (50s - 60s)</option>
+                                        <option value="reels">Instagram Reel (30s Viral Hook)</option>
+                                        <option value="long">YouTube Long-Form (8-10 Min)</option>
+                                        <option value="fb">Facebook Engaging Video</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-gray-400 mb-1 font-medium">Language Style</label>
+                                    <select id="script-lang" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-indigo-500">
+                                        <option value="hinglish">Hinglish Conversational (Best for Reels)</option>
+                                        <option value="hindi">Pure Hindi (Shuddh + High Energy)</option>
+                                        <option value="english">Punchy Global English</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-gray-400 mb-1 font-medium">Content Tone</label>
+                                    <select id="script-tone" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-indigo-500">
+                                        <option value="energetic">🔥 High-Energy & Fast Paced</option>
+                                        <option value="value">💡 Value-Packed & Educational</option>
+                                        <option value="comedy">😂 Funny & Relatable POV</option>
+                                        <option value="kids">👶 Playful & Catchy (Family/Kids)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-gray-400 mb-1 font-medium">Call To Action (CTA)</label>
+                                    <select id="script-cta" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-gray-200 focus:outline-none focus:border-indigo-500">
+                                        <option value="comments">Comment Your Thought (Boost Alg.)</option>
+                                        <option value="share">Share with a Friend / Tag Someone</option>
+                                        <option value="subscribe">Subscribe / Follow for Part 2</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Generate Button -->
+                            <button onclick="generateViralScript()" class="w-full py-2.5 bg-gradient-to-r from-pink-600 to-indigo-600 hover:from-pink-500 hover:to-indigo-500 text-white rounded-xl font-bold text-xs shadow-lg flex items-center justify-center gap-2 transition transform active:scale-95">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Custom Viral Script
+                            </button>
+
+                            <!-- SCRIPT OUTPUT CONTAINER -->
+                            <div class="relative bg-gray-950 rounded-xl border border-gray-800 p-4 flex flex-col gap-3">
+                                <div class="flex items-center justify-between pb-2 border-b border-gray-800/80">
+                                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                                        <i class="fa-solid fa-file-lines"></i> Ready-to-Shoot Script Timeline
+                                    </span>
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="copyToClipboard('script-content', 'Script copied to clipboard!')" class="text-xs text-gray-400 hover:text-white flex items-center gap-1 bg-gray-900 px-2 py-1 rounded border border-gray-800">
+                                            <i class="fa-regular fa-copy"></i> Copy
+                                        </button>
+                                        <button onclick="downloadScriptTXT()" class="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 bg-indigo-950/60 px-2 py-1 rounded border border-indigo-800/60">
+                                            <i class="fa-solid fa-download"></i> .TXT
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="script-content" class="text-xs leading-relaxed text-gray-300 font-sans space-y-3 max-h-[360px] overflow-y-auto custom-scrollbar pr-1">
+                                    <p class="text-gray-500 italic text-center py-6">
+                                        Select any trending topic card and click "Generate Custom Viral Script" to build a timestamped script with B-Roll visual notes!
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- VIRAL CHEAT SHEET MINI CARD -->
+                    <div class="glass-panel p-4 rounded-2xl border border-gray-800 flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <div class="text-xs">
+                            <h4 class="font-bold text-white mb-0.5">Algorithm Pro-Tip for Indian Creators</h4>
+                            <p class="text-gray-400 leading-normal">
+                                First 2.5 seconds must use a text overlay in Hinglish + a fast visual change (snap cuts). Reels and Shorts with Hindi voiceover + English on-screen subtitles get 3.2x higher watch retention.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gray-900 bg-gray-950 py-6 mt-12 text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-300">ViralPulse Studio 🇮🇳</span>
+                <span>— Real-time Social Media Intelligence for Creators</span>
+            </div>
+            <div class="flex items-center gap-4 text-gray-400">
+                <span class="hover:text-white cursor-pointer"><i class="fa-brands fa-youtube text-red-500 mr-1"></i> Shorts Engine</span>
+                <span class="hover:text-white cursor-pointer"><i class="fa-brands fa-instagram text-pink-500 mr-1"></i> Reels Radar</span>
+                <span class="hover:text-white cursor-pointer"><i class="fa-brands fa-facebook text-blue-500 mr-1"></i> FB Video Index</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- APPLICATION LOGIC SCRIPT -->
+    <script>
+        // MASTER TREND DATASET (Rich, realistic, tuned for November 2026 Indian & Global Social Media Algorithms)
+        const MASTER_TRENDS = [
+            {
+                id: 'trend-1',
+                title: 'Structured "Day in the Life of AI Agent" & 5 Stages of Automation',
+                niche: 'tech',
+                platform: ['youtube', 'instagram', 'facebook'],
+                stars: 5,
+                velocity: '+2,450%',
+                viewBenchmark: '6.8M Views in 48h',
+                refTitle: 'Viral Video Sample: "I let 3 AI Agents run my life for 24 Hours in India"',
+                refUrl: 'https://www.youtube.com/results?search_query=AI+agent+runs+my+life+24+hours',
+                remixIdea: 'Remix Twist: Show 3 cheap/free AI tools running a small Indian kirana store or college project instead of a generic US setup. Add funny Hindi voiceover reacting to AI mistakes.',
+                hookEn: 'Stop using ChatGPT like a basic chatbot! Here is how 3 Autonomous AI Agents do my actual work in 2026...',
+                hookHi: 'ChatGPT को पुराने तरीके से इस्तेमाल करना बंद करो! ये 3 AI एगेन्ट्स आपका सारा काम खुद कर देंगे...',
+                tagsEn: ['#AIAgents', '#TechHacks', '#ArtificialIntelligence', '#ProductivityHacks', '#FutureTech', '#AIAutomation'],
+                tagsHi: ['#एआईटूल', '#टेकहैक्स', '#वायरलवीडियो', '#देसीटेक', '#aiहिंदी', '#ytshortsindia'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Camera zooms into phone screen showing AI agent booking a cab & ordering chai automatically]\n[AUDIO - Fast]: "अगर आप अभी भी ChatGPT में सवाल टाइप कर रहे हो, तो आप 2026 में 5 साल पीछे हो!"',
+                    bridge: '[VISUAL: Quick split screen showing manual work vs AI Agent automated workflow]\n[AUDIO]: "3 ऐसे AI Agents जो आपके कहने पर खुद कंप्यूटर चलाकर काम पूरा करते हैं — और सबसे मस्त बात? यह बिल्कुल मुफ़्त हैं!"',
+                    core: '[VISUAL: Screen recording of Tool #1 doing automated social posts & Tool #2 handling emails]\n[AUDIO]: "Tool 1: Auto-Poster — यह आपके नाम से रोज़ वीडियो पोस्ट करता है। Tool 2: Smart Agent — यह आपकी ईमेल का सही जवाब खुद टाइप करता है।"',
+                    cta: '[AUDIO]: "नीचे "AI" कमेंट करो, मैं आपको इन तीनों टूल्स का डायरेक्ट सीक्रेट लिंक DM में भेज दूंगा! फॉलो बटन दबाना मत भूलना!"'
+                }
+            },
+            {
+                id: 'trend-2',
+                title: 'Interactive Kids Rhyme Loops & Phonics Motion Songs',
+                niche: 'kids',
+                platform: ['youtube', 'facebook'],
+                stars: 5,
+                velocity: '+3,100%',
+                viewBenchmark: '18.4M Views in 7 Days',
+                refTitle: 'Viral Video Sample: "Chuchu TV Style Hindi Machhli Jal Ki Rani 3D Bounce Edition"',
+                refUrl: 'https://www.youtube.com/results?search_query=Machhli+Jal+Ki+Rani+3D+interactive+rhyme',
+                remixIdea: 'Remix Twist: Create colorful 2D/3D bouncy animals singing bilingual numbers (1-10 Ek Do Teen) with visual clapping prompts for toddlers.',
+                hookEn: 'Learn Numbers with Jumping Animals! Hindi + English Rhymes for Toddlers 🐱🎶',
+                hookHi: 'मछली जल की रानी है और गिनती सीखो! बच्चों के लिए मज़ेदार बाल गीत 🌟',
+                tagsEn: ['#KidsRhymes', '#ToddlerSongs', '#HindiRhymes', '#PhonicsForKids', '#NurseryRhymes', '#KidsLearning'],
+                tagsHi: ['#बालगीत', '#बच्चोंकेगाने', '#हिंदीराइम्स', '#किड्सवीडियो', '#मछलीजलकीरानी', '#kidschannel'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Bright 3D Cartoon Elephant jumping on screen with rhythmic bass drum]\n[AUDIO - Cheerful]: "एक दो तीन... चलो गनते हैं हाथी के संग! 🐘 🎵"',
+                    bridge: '[VISUAL: Elephant splashes in colorful water puddle as numbers pop up]\n[AUDIO]: "मछली जल की रानी है, जीवन उसका पानी है! हाथ लगाओ तो डर जाएगी, बाहर निकालो तो...?"',
+                    core: '[VISUAL: Interactive pause where children are expected to shout "मर जाएगी!"]\n[AUDIO]: "बच्चों साथ में गाओ! 1-2-3-4-5... Swimming swimming in the hive!"',
+                    cta: '[VISUAL: Animated Subscribe button with ringing bell animation]\n[AUDIO]: "अपने बच्चों के लिए और भी प्यारे बालगीत देखने के लिए सब्सक्राइब बटन दबाएं!"'
+                }
+            },
+            {
+                id: 'trend-3',
+                title: 'Quick-Commerce Price Battle: Blinkit vs Zepto vs Instamart 10-Min Test',
+                niche: 'finance',
+                platform: ['youtube', 'instagram'],
+                stars: 5,
+                velocity: '+1,920%',
+                viewBenchmark: '4.5M Views in 3 Days',
+                refTitle: 'Viral Reel Sample: "Ordered Maggi from Blinkit, Zepto & Instamart at exact same second!"',
+                refUrl: 'https://www.instagram.com/explore/tags/blinkitvszepto/',
+                remixIdea: 'Remix Twist: Don\'t just test speed; test hidden charges, handling fees, and item freshness (e.g. tomatoes or milk) across 3 quick commerce apps simultaneously in 3 different locations.',
+                hookEn: 'Ordered the EXACT same grocery list on Blinkit, Zepto & Instamart together! Who cheated on delivery fees?',
+                hookHi: 'Blinkit, Zepto और Instamart से एक साथ सामान ऑर्डर किया! कौन सबसे तेज़ और सस्ता है?',
+                tagsEn: ['#Blinkit', '#Zepto', '#Instamart', '#MoneyHacks', '#PriceComparison', '#QuickCommerce'],
+                tagsHi: ['#ब्लिंकिट', '#ज़ेप्टो', '#देसीजुगाड़', '#पैसेबचाओ', '#वायरलरील्स', '#shoppinghacks'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Split screen with 3 smartphones tapping "Place Order" at 0.00 seconds with stopwatch background]\n[AUDIO - High Energy]: "मैंने Blinkit, Zepto और Instamart से 3 सेम चीज़ें एक ही सेकेंड में ऑर्डर कीं! देखते हैं कौन पहले पहुँचता है!"',
+                    bridge: '[VISUAL: Timer ticking rapidly on screen with door camera footage]\n[AUDIO]: "5 मिनट हो चुके हैं... और पहली डिलीवरी बॉय की बाइक बाहर रुकी है!"',
+                    core: '[VISUAL: Unboxing grocery packages, showing bill receipts with highlighted platform fees]\n[AUDIO]: "Zepto आया 7 मिनट में, Blinkit आया 9 मिनट में! लेकिन सबसे सस्ता कौन पड़ा? ध्यान से देखो यह ₹15 का हिडन हैंडलिंग चार्ज!"',
+                    cta: '[AUDIO]: "आप किस ऐप से सामान मंगाते हो? कमेंट में बताओ और अपने दोस्तों को शेयर करो ताकि उनके पैसे बचें!"'
+                }
+            },
+            {
+                id: 'trend-4',
+                title: 'Winter Himalayan Roadtrip Transition & Cinematic Sound Design',
+                niche: 'lifestyle',
+                platform: ['instagram', 'youtube'],
+                stars: 4,
+                velocity: '+1,480%',
+                viewBenchmark: '3.9M Views in 4 Days',
+                refTitle: 'Viral Reel Sample: "Spiti/Manali Winter Drive Cinematic POV + Flute Beat Drop"',
+                refUrl: 'https://www.instagram.com/explore/tags/spitivalley/',
+                remixIdea: 'Remix Twist: Mix high-speed hyperlapse car driving footage with crisp ASMR tea-pouring sounds (Kulhad Chai in snow) instead of standard upbeat electronic music.',
+                hookEn: 'If you are planning a Spiti or Manali winter trip in 2026, DO NOT make this ₹10,000 mistake!',
+                hookHi: 'अगर आप सर्दियों में मनाली या स्पीति जा रहे हैं, तो यह 1 ग़लती भारी पड़ सकती है!',
+                tagsEn: ['#SpitiValley', '#WinterTravel', '#CinematicReels', '#TravelIndia', '#IncredibleIndia', '#RoadtripPOV'],
+                tagsHi: ['#हिमाचल', '#यात्रा', '#मनाली', '#वायरलरील्स', '#पहाड़ीजीवन', '#travelvlog'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Dramatic snow-covered road visual with sudden bass-drop music cut]\n[AUDIO]: "बर्फबारी में गाड़ी चलाने से पहले यह 1 चीज़ ज़रूर चेक कर लेना, नहीं तो गाड़ी बीच रास्ते फंस जाएगी!"',
+                    bridge: '[VISUAL: Quick cuts of snow chains being fitted to car tires & hot chai steam]\n[AUDIO]: "सब लोग स्पीति और मनाली का सुंदर नज़ारा दिखाते हैं, लेकिन कोई यह 3 सीक्रेट बजट टिप्स नहीं बताता..."',
+                    core: '[VISUAL: Beautiful drone shot of snow peaks followed by budget text breakdown on screen]\n[AUDIO]: "1. Homestays हमेशा लोकल गाँव में लो, होटल 3x महंगे मिलेंगे। 2. Tyre chains शाम 4 बजे से पहले किराए पर ले लो।"',
+                    cta: '[AUDIO]: "यह वीडियो अपने ट्रैवेल पार्टनर के साथ शेयर करो और सेव कर लो अगली ट्रिप के लिए!"'
+                }
+            },
+            {
+                id: 'trend-5',
+                title: 'Retro Bollywood Song Synthwave Remix POV (90s Hits)',
+                niche: 'comedy',
+                platform: ['instagram', 'youtube', 'facebook'],
+                stars: 4,
+                velocity: '+1,650%',
+                viewBenchmark: '5.2M Views in 5 Days',
+                refTitle: 'Viral Reel Sample: "POV: Hearing 90s Alka Yagnik songs in Lo-Fi Synthwave style"',
+                refUrl: 'https://www.youtube.com/results?search_query=90s+bollywood+synthwave+remix+reels',
+                remixIdea: 'Remix Twist: Pair nostalgic 90s Bollywood audio with modern everyday Indian relatable situations (e.g., waiting for WFH shift to end, or mom giving tiffin box).',
+                hookEn: 'POV: When 90s Bollywood songs hit different late at night during coding / work shifts...',
+                hookHi: 'जब रात 2 बजे 90s का बॉलीवुड गाना बजता है और पुरानी यादें आ जाती हैं... 😂',
+                tagsEn: ['#Nostalgia', '#90sBollywood', '#RelatablePOV', '#HindiLoFi', '#SynthwaveIndia', '#ReelTrends'],
+                tagsHi: ['#बॉलीवुड', '#पुरानेगाने', '#कॉमेडीरील्स', '#मीम्स', '#वायरलवीडियो', '#hinglishmemes'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Person sitting with laptop, dramatic lighting change as synthwave 90s beat plays]\n[AUDIO - Music Track]: "Slowed & Reverb 90s iconic Bollywood chorus line playing in background"',
+                    bridge: '[VISUAL: Over-dramatic slow motion sip of chai with nostalgic expression]\n[AUDIO]: "90s के गानों में जो बात थी ना, आज के रीमिक्स में वो फील कहाँ..."',
+                    core: '[VISUAL: Hilarious comparison of 90s romantic lyrics vs 2026 text messages]\n[AUDIO]: "90s: तुम्हारे लिए चाँद तारे तोड़ लाऊँगा! 2026: Blinkit से आइसक्रीम भेज दी है, OTP बता दो!"',
+                    cta: '[AUDIO]: "अपने 90s वाले स्कूल दोस्त को टैग करो और फॉलो करो ऐसे ही नॉस्टैल्जिक कंटेंट के लिए!"'
+                }
+            },
+            {
+                id: 'trend-6',
+                title: 'GTA 6 Indian Location Mod Breakdown & Hidden Easter Eggs',
+                niche: 'gaming',
+                platform: ['youtube', 'facebook'],
+                stars: 5,
+                velocity: '+2,800%',
+                viewBenchmark: '9.1M Views in 3 Days',
+                refTitle: 'Viral Breakdown Sample: "GTA 6 Trailer Frame-by-Frame Indian References & Physics"',
+                refUrl: 'https://www.youtube.com/results?search_query=GTA+6+trailer+breakdown+hindi',
+                remixIdea: 'Remix Twist: Create a satirical "What if GTA 6 was set in Mumbai / Delhi Traffic?" animation or gameplay commentary focusing on traffic cops & street food stalls.',
+                hookEn: 'What happens if you try Indian Driving Rules in GTA 6 graphics engine?',
+                hookHi: 'अगर GTA 6 भारत में सेट होता तो ट्रैफिक पुलिस और सड़कों का हाल कैसा होता? 🎮😂',
+                tagsEn: ['#GTA6', '#GamingIndia', '#GTA6Trailer', '#GamingHacks', '#GamersOfIndia', '#HindiGaming'],
+                tagsHi: ['#गेमिंग', '#जीटीए6', '#गेमरहिंदी', '#वायरलगेम', '#ytshortsindia', '#gamingcommunity'],
+                scriptTemplate: {
+                    hook: '[VISUAL: High definition hyper-realistic driving gameplay in neon city with Hindi voiceover]\n[AUDIO - Hyped]: "अगर GTA 6 भारत के शहरों में लॉन्च हो जाए, तो गेम का पहला मिशन क्या होगा?"',
+                    bridge: '[VISUAL: Gameplay character trying to park car in narrow alleyway with funny sound effect]\n[AUDIO]: "Mission 1: बैंगलोर के ट्रैफ़िक से निकलकर 15 मिनट में ऑफिस पहुँचना!"',
+                    core: '[VISUAL: Showing funny custom Indian auto-rickshaw mod in unreal engine 5]\n[AUDIO]: "ध्यान से देखो इस ऑटोरिक्शा मोड को, इसमें 3D हॉर्न साउंड और देसी डेकोरेशन भी डाली गई है!"',
+                    cta: '[AUDIO]: "क्या आप यह गेम खेलोगे? कमेंट में अपना पसंदीदा व्हीकल बताओ और चैनल को सब्सक्राइब करो!"'
+                }
+            },
+            {
+                id: 'trend-7',
+                title: 'Desi Jugaad Household Gadget Testing & Honest Verdict',
+                niche: 'tech',
+                platform: ['facebook', 'youtube', 'instagram'],
+                stars: 4,
+                velocity: '+1,750%',
+                viewBenchmark: '3.4M Views in 48h',
+                refTitle: 'Viral Video Sample: "Testing ₹199 Viral Amazon Kitchen Hacks - Scam or Worth it?"',
+                refUrl: 'https://www.youtube.com/results?search_query=Testing+viral+amazon+kitchen+gadgets+india',
+                remixIdea: 'Remix Twist: Test gadgets directly against traditional Indian tools (e.g. Electric Garlic Peeler vs Mom\'s traditional hand technique) with timer.',
+                hookEn: 'I bought ₹150 viral kitchen gadget from Instagram ad! Complete Scam or Real Deal?',
+                hookHi: 'इन्स्टाग्राम पर दिखने वाला यह ₹150 का देसी गैजेट काम करता है या पैसे बर्बाद?',
+                tagsEn: ['#AmazonFinds', '#GadgetTesting', '#DesiJugaad', '#UnboxingIndia', '#TechShorts', '#ProductReview'],
+                tagsHi: ['#गैजेट्स', '#अमेज़नफाइंड्स', '#देसीजुगाड़', '#रिव्यू', '#वायरलवीडियो', '#techindia'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Unboxing weirdly shaped plastic gadget with big question mark text on screen]\n[AUDIO]: "इन्स्टाग्राम पर इस ₹150 वाले गैजेट का एड 100 बार देखा था, तो मैंने इसे खुद ऑर्डर कर लिया!"',
+                    bridge: '[VISUAL: Trying to operate the gadget, showing initial failure then success]\n[AUDIO]: "कंपनी दावा करती है कि यह 5 सेकेंड में लहसुन छील देता है... चलो टेस्ट करते हैं!"',
+                    core: '[VISUAL: Side-by-side timer: Gadget (12s) vs Traditional Knife (8s)]\n[AUDIO]: "रिजल्ट आपके सामने है! चाकू से ज़्यादा टाइम लग गया। यानी यह गैजेट एकदम टाइम वेस्ट है!"',
+                    cta: '[AUDIO]: "अपने घर वालों को यह वीडियो शेयर करो ताकि उनके पैसे बच सकें! ऐसे और ऑनेस्ट रिव्यूज के लिए फॉलो करें!"'
+                }
+            },
+            {
+                id: 'trend-8',
+                title: 'Winter Festive Look & Budget Thrift Challenge (Under ₹999)',
+                niche: 'lifestyle',
+                platform: ['instagram', 'youtube'],
+                stars: 4,
+                velocity: '+1,390%',
+                viewBenchmark: '2.9M Views in 3 Days',
+                refTitle: 'Viral Reel Sample: "Sarojini / Janpath Market Winter Haul & Styling 4 Looks"',
+                refUrl: 'https://www.instagram.com/explore/tags/sarojinimarket/',
+                remixIdea: 'Remix Twist: Recreate high-end celebrity winter airport looks using local street market clothes and show exact cost breakdown comparison.',
+                hookEn: 'Recreating ₹80,000 Celebrity Airport Look in just ₹750 from local market!',
+                hookHi: 'सेलिब्रिटी का ₹80,000 का विंटर लुक सिर्फ ₹750 में सरोजिनी नगर से रीक्रिएट किया!',
+                tagsEn: ['#FashionHaul', '#BudgetStyling', '#WinterOOTD', '#ThriftFlip', '#SarojiniHaul', '#StreetStyleIndia'],
+                tagsHi: ['#फैशन', '#विंटरफैशन', '#सरोजिनीनगर', '#स्टाइलटिप्स', '#वायरलरील्स', '#fashionhindi'],
+                scriptTemplate: {
+                    hook: '[VISUAL: Split screen: High end celeb outfit picture vs creator in local market holding ₹200 jacket]\n[AUDIO]: "इस ₹80,000 के विंटर आउटफिट को क्या मैं सिर्फ ₹750 में रीक्रिएट कर पाई?"',
+                    bridge: '[VISUAL: Fast transition clips walking through market stalls with price tags popups]\n[AUDIO]: "जैकेट मिली ₹300 में, बॉटम्स मिले ₹250 में और बूट्स ₹200 में!"',
+                    core: '[VISUAL: Full spin transition into final styled outfit with aesthetic background]\n[AUDIO]: "फाइनल लुक देखो! कोई बोल सकता है यह ₹750 का आउटफिट है? 10 में से रेटिंग कमेंट करो!"',
+                    cta: '[AUDIO]: "अगर आपको भी बजट फैशन पसंद है तो फॉलो बटन दबाना मत भूलना!"'
+                }
+            }
+        ];
+
+        // CURRENT ACTIVE STATE
+        let activePlatform = 'all';
+        let activeLanguage = 'bilingual';
+        let activeNiche = 'all';
+        let activeSort = 'stars';
+        let activeSelectedTrend = MASTER_TRENDS[0];
+
+        // INITIALIZE ON LOAD
+        window.onload = function() {
+            renderTrendsGrid();
+            selectTrendCard(MASTER_TRENDS[0].id);
+        };
+
+        // REFRESH DATA SIMULATION ENGINE
+        function refreshTrendData() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            const refreshIcon = document.getElementById('refresh-icon');
+            const syncTimeText = document.getElementById('last-sync-time');
+
+            // Button Loading animation
+            refreshIcon.classList.add('fa-spin');
+            refreshBtn.classList.add('opacity-80', 'pointer-events-none');
+
+            setTimeout(() => {
+                // Slightly randomize velocity & view counts to simulate live algorithm shifts
+                MASTER_TRENDS.forEach(trend => {
+                    const randomGain = Math.floor(Math.random() * 250) + 50;
+                    const baseVel = parseInt(trend.velocity.replace(/[^0-9]/g, ''));
+                    trend.velocity = `+${baseVel + randomGain}%`;
+                });
+
+                // Re-render
+                renderTrendsGrid();
+                
+                // Reset Icon & Timestamp
+                refreshIcon.classList.remove('fa-spin');
+                refreshBtn.classList.remove('opacity-80', 'pointer-events-none');
+                
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                syncTimeText.innerText = `Synced at ${timeStr}`;
+
+                showToast('🚀 Algorithm Radar Refreshed with Latest Social Metrics!');
+            }, 750);
+        }
+
+        // FILTER FUNCTIONS
+        function setPlatformFilter(platform) {
+            activePlatform = platform;
+            document.querySelectorAll('.platform-chip').forEach(chip => {
+                if(chip.dataset.platform === platform) {
+                    chip.classList.add('bg-gray-800', 'text-white', 'border-gray-700');
+                    chip.classList.remove('bg-gray-900', 'text-gray-400', 'border-gray-800');
+                } else {
+                    chip.classList.remove('bg-gray-800', 'text-white', 'border-gray-700');
+                    chip.classList.add('bg-gray-900', 'text-gray-400', 'border-gray-800');
+                }
+            });
+            applyFilters();
+        }
+
+        function setLanguageMode(lang) {
+            activeLanguage = lang;
+            document.querySelectorAll('.lang-chip').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('text-gray-400');
+            });
+            const activeBtn = document.getElementById(`lang-btn-${lang}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-indigo-600', 'text-white');
+                activeBtn.classList.remove('text-gray-400');
+            }
+            renderTrendsGrid();
+            if(activeSelectedTrend) {
+                updateStudioTags(activeSelectedTrend);
+            }
+        }
+
+        function applyFilters() {
+            activeNiche = document.getElementById('niche-select').value;
+            activeSort = document.getElementById('sort-select').value;
+            renderTrendsGrid();
+        }
+
+        // RENDER TREND CARDS IN LEFT FEED
+        function renderTrendsGrid() {
+            const grid = document.getElementById('trends-grid');
+            grid.innerHTML = '';
+
+            let filtered = MASTER_TRENDS.filter(item => {
+                const matchPlatform = activePlatform === 'all' || item.platform.includes(activePlatform);
+                const matchNiche = activeNiche === 'all' || item.niche === activeNiche;
+                return matchPlatform && matchNiche;
+            });
+
+            // Sorting
+            if (activeSort === 'stars') {
+                filtered.sort((a, b) => b.stars - a.stars);
+            } else if (activeSort === 'velocity') {
+                filtered.sort((a, b) => parseInt(b.velocity) - parseInt(a.velocity));
+            }
+
+            document.getElementById('active-filter-badge').innerText = `${activePlatform.toUpperCase()} • ${filtered.length} Trends`;
+            document.getElementById('stat-trends-count').innerText = `${filtered.length} Active`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="glass-panel p-8 rounded-2xl text-center border border-gray-800">
+                        <i class="fa-solid fa-filter-circle-xmark text-3xl text-gray-600 mb-2"></i>
+                        <p class="text-sm text-gray-400">No viral trends match the selected platform & niche filter combination.</p>
+                        <button onclick="setPlatformFilter('all')" class="mt-3 text-xs text-indigo-400 hover:underline">Reset Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(trend => {
+                const isSelected = activeSelectedTrend && activeSelectedTrend.id === trend.id;
+
+                // Star rendering
+                let starsHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= trend.stars) {
+                        starsHTML += `<i class="fa-solid fa-star star-gold text-xs"></i>`;
+                    } else {
+                        starsHTML += `<i class="fa-regular fa-star text-gray-600 text-xs"></i>`;
+                    }
+                }
+
+                // Platform icons badge
+                let platformBadges = '';
+                if (trend.platform.includes('youtube')) {
+                    platformBadges += `<span class="px-2 py-0.5 rounded bg-red-950/60 text-red-400 border border-red-800/40 text-[10px] font-medium"><i class="fa-brands fa-youtube mr-1"></i>YouTube</span> `;
+                }
+                if (trend.platform.includes('instagram')) {
+                    platformBadges += `<span class="px-2 py-0.5 rounded bg-pink-950/60 text-pink-400 border border-pink-800/40 text-[10px] font-medium"><i class="fa-brands fa-instagram mr-1"></i>Reels</span> `;
+                }
+                if (trend.platform.includes('facebook')) {
+                    platformBadges += `<span class="px-2 py-0.5 rounded bg-blue-950/60 text-blue-400 border border-blue-800/40 text-[10px] font-medium"><i class="fa-brands fa-facebook mr-1"></i>FB Video</span> `;
+                }
+
+                const cardHTML = `
+                    <div id="card-${trend.id}" onclick="selectTrendCard('${trend.id}')" 
+                         class="glass-panel p-5 rounded-2xl border transition-all duration-300 cursor-pointer relative overflow-hidden group ${isSelected ? 'border-indigo-500 bg-gray-900/90 pulse-glow ring-1 ring-indigo-500/50' : 'border-gray-800/90 hover:border-gray-700 bg-gray-900/50'}">
+                        
+                        <!-- Top Row: Rating & Velocity -->
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="flex items-center gap-1.5 bg-amber-950/40 border border-amber-800/40 px-2.5 py-1 rounded-full">
+                                <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wider mr-1">Viral Priority:</span>
+                                ${starsHTML}
+                            </div>
+                            
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                    <i class="fa-solid fa-bolt text-[10px]"></i> ${trend.velocity}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Title -->
+                        <h3 class="text-base font-bold text-white group-hover:text-indigo-300 transition mb-2">
+                            ${trend.title}
+                        </h3>
+
+                        <!-- Platform Badges & Benchmark -->
+                        <div class="flex flex-wrap items-center gap-2 mb-3 text-xs">
+                            ${platformBadges}
+                            <span class="text-gray-400 text-[11px] flex items-center gap-1">
+                                <i class="fa-solid fa-eye text-indigo-400"></i> ${trend.viewBenchmark}
+                            </span>
+                        </div>
+
+                        <!-- Reference Sample Box -->
+                        <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800/80 mb-3 flex flex-col gap-1.5 text-xs">
+                            <div class="flex items-center justify-between text-gray-400 font-medium">
+                                <span class="flex items-center gap-1 text-[11px] text-gray-300 font-semibold">
+                                    <i class="fa-solid fa-circle-play text-red-400"></i> Existing Hit Reference:
+                                </span>
+                                <a href="${trend.refUrl}" target="_blank" onclick="event.stopPropagation()" class="text-indigo-400 hover:text-indigo-300 text-[11px] underline flex items-center gap-1">
+                                    <span>Watch / Inspect</span> <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                                </a>
+                            </div>
+                            <p class="text-gray-300 font-mono text-[11px] bg-gray-900/90 px-2 py-1 rounded border border-gray-800">
+                                "${trend.refTitle}"
+                            </p>
+                        </div>
+
+                        <!-- Fresh Remix Twist Idea Callout -->
+                        <div class="bg-indigo-950/30 border border-indigo-800/40 p-3 rounded-xl text-xs flex items-start gap-2.5">
+                            <div class="text-indigo-400 mt-0.5 shrink-0">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+                            <div>
+                                <span class="font-bold text-indigo-300 uppercase text-[10px] tracking-wider block mb-0.5">Untapped Remix Twist Idea:</span>
+                                <p class="text-gray-300 leading-relaxed text-[11px]">${trend.remixIdea}</p>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Action Row -->
+                        <div class="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs">
+                            <span class="text-gray-400 text-[11px]">Click to auto-generate titles & scripts</span>
+                            <button class="px-3 py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 font-medium text-xs flex items-center gap-1.5 transition">
+                                <span>Load into Studio</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        // SELECT A TREND CARD & LOAD INTO STUDIO
+        function selectTrendCard(trendId) {
+            const found = MASTER_TRENDS.find(t => t.id === trendId);
+            if (!found) return;
+
+            activeSelectedTrend = found;
+            document.getElementById('selected-topic-title').innerText = found.title;
+
+            // Highlight selected card visually
+            document.querySelectorAll('#trends-grid > div').forEach(c => {
+                c.classList.remove('border-indigo-500', 'bg-gray-900/90', 'pulse-glow', 'ring-1', 'ring-indigo-500/50');
+                c.classList.add('border-gray-800/90', 'bg-gray-900/50');
+            });
+
+            const currentCard = document.getElementById(`card-${trendId}`);
+            if (currentCard) {
+                currentCard.classList.remove('border-gray-800/90', 'bg-gray-900/50');
+                currentCard.classList.add('border-indigo-500', 'bg-gray-900/90', 'pulse-glow', 'ring-1', 'ring-indigo-500/50');
+            }
+
+            // Populate Studio Tags & Hooks
+            updateStudioTags(found);
+            
+            // Auto-generate fresh script preview for this item
+            generateViralScript();
+        }
+
+        // UPDATE TAG STUDIO CONTENT
+        function updateStudioTags(trend) {
+            document.getElementById('hook-text-en').innerText = trend.hookEn;
+            document.getElementById('hook-text-hi').innerText = trend.hookHi;
+
+            // Render EN Tags Chips
+            const containerEN = document.getElementById('tags-en-container');
+            containerEN.innerHTML = '';
+            trend.tagsEn.forEach(tag => {
+                containerEN.innerHTML += `
+                    <span onclick="copyToClipboard('${tag}', 'Tag copied!')" class="px-2.5 py-1 rounded-lg bg-indigo-950/60 border border-indigo-800/50 text-indigo-300 text-xs font-mono hover:bg-indigo-900 cursor-pointer transition flex items-center gap-1">
+                        ${tag} <i class="fa-regular fa-copy text-[10px] opacity-60"></i>
+                    </span>
+                `;
+            });
+
+            // Render Hindi Tags Chips
+            const containerHI = document.getElementById('tags-hi-container');
+            containerHI.innerHTML = '';
+            trend.tagsHi.forEach(tag => {
+                containerHI.innerHTML += `
+                    <span onclick="copyToClipboard('${tag}', 'Tag copied!')" class="px-2.5 py-1 rounded-lg bg-pink-950/60 border border-pink-800/50 text-pink-300 text-xs font-mono hover:bg-pink-900 cursor-pointer transition flex items-center gap-1">
+                        ${tag} <i class="fa-regular fa-copy text-[10px] opacity-60"></i>
+                    </span>
+                `;
+            });
+        }
+
+        // STUDIO TAB SWITCHING
+        function switchStudioTab(tab) {
+            const tabTags = document.getElementById('studio-tab-tags');
+            const tabScript = document.getElementById('studio-tab-script');
+            const btnTags = document.getElementById('tab-btn-tags');
+            const btnScript = document.getElementById('tab-btn-script');
+
+            if (tab === 'tags') {
+                tabTags.classList.remove('hidden');
+                tabScript.classList.add('hidden');
+                btnTags.classList.add('bg-indigo-600', 'text-white', 'shadow');
+                btnTags.classList.remove('text-gray-400');
+                btnScript.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+                btnScript.classList.add('text-gray-400');
+            } else {
+                tabScript.classList.remove('hidden');
+                tabTags.classList.add('hidden');
+                btnScript.classList.add('bg-indigo-600', 'text-white', 'shadow');
+                btnScript.classList.remove('text-gray-400');
+                btnTags.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+                btnTags.classList.add('text-gray-400');
+            }
+        }
+
+        // SCRIPT GENERATOR ENGINE
+        function generateViralScript() {
+            if (!activeSelectedTrend) return;
+
+            const platform = document.getElementById('script-platform').value;
+            const lang = document.getElementById('script-lang').value;
+            const tone = document.getElementById('script-tone').value;
+            const ctaType = document.getElementById('script-cta').value;
+
+            const t = activeSelectedTrend.scriptTemplate;
+
+            let ctaText = '';
+            if (ctaType === 'comments') {
+                ctaText = lang === 'english' 
+                    ? '[AUDIO]: "Comment your thoughts below and hit Follow for Part 2 tomorrow!"'
+                    : '[AUDIO]: "अपनी राय नीचे कमेंट में बताओ और पार्ट 2 के लिए अभी फॉलो करो!"';
+            } else if (ctaType === 'share') {
+                ctaText = lang === 'english'
+                    ? '[AUDIO]: "Share this reel with a friend who really needs to see this today!"'
+                    : '[AUDIO]: "यह वीडियो अपने दोस्त के साथ तुरंत शेयर करो!"';
+            } else {
+                ctaText = lang === 'english'
+                    ? '[AUDIO]: "Subscribe right now for daily viral tech and lifestyle updates!"'
+                    : '[AUDIO]: "ऐसी ही वायरल वीडियो के लिए अभी सब्सक्राइब बटन दबाएं!"';
+            }
+
+            const scriptHTML = `
+                <div class="bg-gray-900 p-3 rounded-lg border border-gray-800/80 mb-2">
+                    <span class="text-[10px] font-bold text-pink-400 uppercase tracking-widest block mb-1">
+                        ⏱️ 0:00 - 0:03 | The Scroll-Stopping Hook
+                    </span>
+                    <p class="whitespace-pre-line text-gray-200 font-medium">${t.hook}</p>
+                </div>
+
+                <div class="bg-gray-900 p-3 rounded-lg border border-gray-800/80 mb-2">
+                    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest block mb-1">
+                        ⏱️ 0:03 - 0:15 | Retention Bridge & Curiosity Setup
+                    </span>
+                    <p class="whitespace-pre-line text-gray-200">${t.bridge}</p>
+                </div>
+
+                <div class="bg-gray-900 p-3 rounded-lg border border-gray-800/80 mb-2">
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">
+                        ⏱️ 0:15 - 0:45 | Core Value & Remix Execution (B-Roll Notes)
+                    </span>
+                    <p class="whitespace-pre-line text-gray-200">${t.core}</p>
+                </div>
+
+                <div class="bg-gray-900 p-3 rounded-lg border border-gray-800/80">
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">
+                        ⏱️ 0:45 - END | Algorithm Comment-Bait CTA
+                    </span>
+                    <p class="whitespace-pre-line text-gray-200">${ctaText}</p>
+                </div>
+            `;
+
+            document.getElementById('script-content').innerHTML = scriptHTML;
+        }
+
+        // COPY UTILITIES (USING document.execCommand FOR SAFE IFRAME COMPATIBILITY)
+        function copyToClipboard(elementIdOrText, successMsg) {
+            let textToCopy = '';
+            const el = document.getElementById(elementIdOrText);
+            
+            if (el) {
+                textToCopy = el.innerText || el.textContent;
+            } else {
+                textToCopy = elementIdOrText;
+            }
+
+            const tempInput = document.createElement('textarea');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast(successMsg || 'Copied to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy text');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function copyTagGroup(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const tags = Array.from(container.querySelectorAll('span')).map(s => s.innerText.trim()).join(' ');
+            copyToClipboard(tags, 'All tags in section copied!');
+        }
+
+        function copyAllStudioTags() {
+            if (!activeSelectedTrend) return;
+            const allTags = [...activeSelectedTrend.tagsEn, ...activeSelectedTrend.tagsHi].join(' ');
+            copyToClipboard(allTags, 'Copied all English & Hindi tags!');
+        }
+
+        function downloadScriptTXT() {
+            if (!activeSelectedTrend) return;
+
+            const scriptEl = document.getElementById('script-content');
+            const scriptText = scriptEl.innerText || scriptEl.textContent;
+
+            const fullContent = `VIRAL PULSE STUDIO 🇮🇳 - SCRIPT EXPORT\n` +
+                                `Topic: ${activeSelectedTrend.title}\n` +
+                                `Format: ${document.getElementById('script-platform').value.toUpperCase()}\n` +
+                                `Date: ${new Date().toLocaleDateString()}\n` +
+                                `--------------------------------------------------\n\n` +
+                                scriptText +
+                                `\n\n--------------------------------------------------\n` +
+                                `Tags (EN): ${activeSelectedTrend.tagsEn.join(' ')}\n` +
+                                `Tags (HI): ${activeSelectedTrend.tagsHi.join(' ')}`;
+
+            const blob = new Blob([fullContent], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `ViralScript_${activeSelectedTrend.id}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('📄 Script downloaded as .TXT file!');
+        }
+
+        // TOAST NOTIFICATION SYSTEM
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-gray-900 text-white border border-indigo-500/50 shadow-2xl px-4 py-3 rounded-xl text-xs flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto';
+            toast.innerHTML = `
+                <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
